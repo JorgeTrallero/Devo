@@ -8,7 +8,7 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <body>
-	  <div id = "containerPie"  style="width:100%; height:400px;"></div>
+		<div id = "containerPie"  style="width:100%; height:400px;"></div>
 	  <div id="lineChart" style="width:100%; height:400px;">
 	  
 <script>
@@ -138,7 +138,7 @@ function formatData(data){
 		var jsondata={};
 		jsondata=data[0];
 		
-		data.sort(sortByProperty('d'));
+		data.sort(sortByProperty('d'),sortByProperty('cat'));
 		data.forEach(function (x){
 			
 		var time=(x.time).getTime();
@@ -158,7 +158,7 @@ function formatData(data){
 		var timeend=(final_data[final_data.length-1].time).getTime();
 		var diff= timeend-timeinit;
 		var one_day=1000*60*60*24;
-		diff=(diff/one_day)-1;
+		diff=(diff/one_day)+1;
 		//final_data.setDate(final_data.getDate() + 3);
 		var labels=[];
 		var labelsLine=[];
@@ -167,24 +167,26 @@ function formatData(data){
 		var data3=[];
 		var data4=[];
 		
-		var poss=0;
-		//for ( poss; poss>58; poss ++){
+	
 		var timelabel=final_data[0].time;
 		var timelabelaux=(final_data[0].time).getTime();
 		labelsLine.push(timelabel.getDate() + "." + monthNames[timelabel.getMonth()]);
 		
-		final_data.sort(sortByProperty('d'));
-		for (var i=0; i<=diff ; i ++)
+		final_data.sort(sortByProperty('time'));
+		for (var i=0; i<diff ; i ++)
 			{
-			var newday = new Date(timelabel.setDate(timelabel.getDate()+ 1));
+			var a = 1;
+			if(i==0){a=0;}
+			var newday = new Date(timelabel.setDate(timelabel.getDate()+ a));
 		    labels.push(newday);
 			labelsLine.push(newday.getDate() + "." + monthNames[newday.getMonth()]);
 			}
 		labels[0]=new Date(timelabelaux);
+		final_data.sort(sortByProperty('time'));
 		final_data.forEach(function (x){
 		
 			//var fecha="";
-			var posicion = 0
+			var posicion = 0;
 			for (i = 0; i < labels.length; i++) { 
 				if((labels[i]).getTime()===(x.time).getTime()){
 					posicion=i;
@@ -192,12 +194,11 @@ function formatData(data){
 				}
 			} 
 
-			//var dayaux=x.time;
-			//var a = labels.indexOf(dayaux);
-			
+		
 			if(x.cat=="CAT 1"){
 				var dataJson=[];
-				dataJson.splice(0,0,posicion + 1);
+				
+				dataJson.splice(0,0,posicion);
 				dataJson.splice(1,0,x.val);
 				data1.push(dataJson);
 				CAT1.push(x.val);
@@ -205,33 +206,34 @@ function formatData(data){
 			}
 			if(x.cat=="CAT 2"){
 				var dataJson=[];
-				dataJson.splice(0,0,posicion + 1 );
+				dataJson.splice(0,0,posicion);
 				dataJson.splice(1,0,x.val);
 				data2.push(dataJson);
 				CAT2.push(x.val);
 			}
 			if(x.cat=="CAT 3"){
 				var dataJson=[];
-				dataJson.splice(0,0,posicion + 1);
+				dataJson.splice(0,0,posicion);
 				dataJson.splice(1,0,x.val);
 				data3.push(dataJson);
 				CAT3.push(x.val);
 			}
 			if(x.cat=="CAT 4"){
 				var dataJson=[];
-				dataJson.splice(0,0,posicion + 1);
+				dataJson.splice(0,0,posicion);
 				dataJson.splice(1,0,x.val);
 				data4.push(dataJson);
 				CAT4.push(x.val);
 			}
 			
 		})
-		data1.shift();
+		
 		var data=[];
 		var finaljson1={};
 		var finaljson2={};
 		var finaljson3={};
 		var finaljson4={};
+		
 		finaljson1.name="CAT 1";
 		finaljson1.data=data1;
 		
@@ -249,6 +251,7 @@ function formatData(data){
 		data.push(finaljson3);
 		data.push(finaljson4);
 		Piechart();
+		
 		Linechart(labelsLine,data);
 		
 		
