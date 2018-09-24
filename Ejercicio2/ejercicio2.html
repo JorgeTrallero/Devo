@@ -41,7 +41,7 @@ function GetData(){
 var data = [] ;
 
 var i= 0;
-//CARGA DATOS PRIMER FICHERO			
+//CARGA DATOS  FICHEROS
 	$.ajax({
 	type : "GET",
 	url: 'http://s3.amazonaws.com/logtrust-static/test/test/data1.json',
@@ -77,7 +77,6 @@ var i= 0;
 				x.myDate = new Date((x.myDate).getFullYear(), (x.myDate).getMonth(), (x.myDate).getDate());
 				newjson.time=x.myDate;
 				newjson.d=(newjson.time).getTime();
-				//newjson.timeD_M = (x.myDate).getDate() + "." + monthNames[(x.myDate).getMonth()];
 				newjson.cat=x.categ;
 				newjson.val=x.val;
 				data[i]=(newjson);
@@ -104,7 +103,6 @@ var i= 0;
 							time=new Date(time);
 							newjson.time = new Date(time.getFullYear(), time.getMonth(), time.getDate()); 
 							newjson.d=(newjson.time).getTime();
-							//newjson.timeD_M = (time).getDate() + "." + monthNames[(time).getMonth()];
 							newjson.cat=((x.raw).match(regexCAT)[0]);
 							newjson.val=x.val;
 							data[i]=(newjson);
